@@ -11,7 +11,11 @@ Internal Commands:
 
 External Commands:
     ls
+        
     cat
+        -E -n
     date
+
     rm
+
     mkdir
