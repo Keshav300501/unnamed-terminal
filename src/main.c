@@ -25,13 +25,11 @@ void unnamed_prompt() {
 
 char *unnamed_read(void) {
         char *resp = malloc(sizeof(char)*1024);
-        //fprintf(stdout, "%d\n", sizeof(resp));
         fgets(resp, 1024, stdin);
         if(resp == NULL) {
             char *str = "Error in getting user input from terminal.";
             return str;
         }
-        //fprintf(stdout, "%s\n", resp);
         return resp;
 }
 
@@ -84,7 +82,7 @@ void unnamed_exec(char *line, char **args) {
         add_history(line);
         return;
     }
-    //return external_call(args);
+    return external_call(args);
 }
 
 void add_history(char *line) {
@@ -94,7 +92,6 @@ void add_history(char *line) {
 }
 
 void unnamed_cd(char **args) {
-    // printf("cd has been called\n");
     int len = -1;
     while (args[++len] != NULL) {}
     if(len > 2) {
@@ -115,7 +112,6 @@ void unnamed_cd(char **args) {
 }
 
 void unnamed_echo(char **args) {
-    // printf("echo has been called\n");
     int i = 1;
     int nflag = 0;
     for( ; args[i] != NULL && args[i][0] == '-' ; i++) {
@@ -143,7 +139,6 @@ void unnamed_echo(char **args) {
 }
 
 void unnamed_pwd(char **args) {
-    // printf("pwd has been called\n");
     char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) == NULL) {
         fprintf(stdout, "Error in getting current path.\n");
@@ -153,7 +148,6 @@ void unnamed_pwd(char **args) {
 }
 
 void unnamed_history(char **args) {
-    // printf("history has been called\n");
     int i = 1;
     for( ; args[i] != NULL && args[i][0] == '-' ; i++) {
         if(args[i+1] == NULL) {
@@ -200,8 +194,11 @@ void unnamed_history(char **args) {
 }
 
 void unnamed_exit(char **args) {
-    // printf("exit has been called\n");
     exit(0);
+}
+
+void external_call(char **args) {
+    
 }
 
 void unnamed_loop(void) {
@@ -212,12 +209,6 @@ void unnamed_loop(void) {
         unnamed_prompt();
         line = unnamed_read();
         args = unnamed_split(line);
-        // fprintf(stdout, "%s", line);
-        // int pos = 0;
-        // while(args[pos] != NULL) {
-        //     printf("%s\n", args[pos]);
-        //     pos++;
-        // }
         unnamed_exec(line, args);
     } 
     while ( 1 );
