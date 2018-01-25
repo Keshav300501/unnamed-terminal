@@ -18,10 +18,6 @@ void main(int argc, char **argv) {
             printf("%s\n", asctime(local));
             return;
         }
-        else if(strcmp(argv[i], "-R") == 0) {
-            // printf("");
-            return;
-        }
         else {
             printf("Syntax error. Refer to readme.\n");
             return;

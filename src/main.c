@@ -82,7 +82,7 @@ void unnamed_exec(char *line, char **args) {
         add_history(line);
         return;
     }
-    return external_call(args);
+    return external_call(line, args);
 }
 
 void add_history(char *line) {
@@ -99,12 +99,12 @@ void unnamed_cd(char **args) {
         return;
     }
     if(args[1] == NULL) {
-        chdir("/home/tank/Documents/unnamed-terminal");
+        chdir(getenv("HOME"));
         return;
     }
     args[1][strlen(args[1])-1] = 0;
     if(strcmp(args[1], "~") == 0) {
-        chdir("/home/tank/Documents/unnamed-terminal");
+        chdir(getenv("HOME"));
         return;
     }
     chdir(args[1]);
@@ -197,8 +197,57 @@ void unnamed_exit(char **args) {
     exit(0);
 }
 
-void external_call(char **args) {
-    
+void external_call(char *line, char **args) {
+    if(strcmp(args[0], "cat") == 0) {
+        if(fork() == 0) {
+            execvp("/home/tank/Documents/unnamed-terminal/out/external/cat", args++);
+        }
+        else {
+            wait(NULL);
+        }
+        add_history(line);
+        return;
+    }
+    if(strcmp(args[0], "date") == 0) {
+        if(fork() == 0) {
+            execvp("/home/tank/Documents/unnamed-terminal/out/external/cat", args++);
+        }
+        else {
+            wait(NULL);
+        }
+        add_history(line);
+        return;
+    }
+    if(strcmp(args[0], "ls") == 0) {
+        if(fork() == 0) {
+            execvp("/home/tank/Documents/unnamed-terminal/out/external/ls", args++);
+        }
+        else {
+            wait(NULL);
+        }
+        add_history(line);
+        return;
+    }
+    if(strcmp(args[0], "mkdir") == 0) {
+        if(fork() == 0) {
+            execvp("/home/tank/Documents/unnamed-terminal/out/external/mkdir", args++);
+        }
+        else {
+            wait(NULL);
+        }
+        add_history(line);
+        return;
+    }
+    if(strcmp(args[0], "rm") == 0) {
+        if(fork() == 0) {
+            execvp("/home/tank/Documents/unnamed-terminal/out/external/rm", args++);
+        }
+        else {
+            wait(NULL);
+        }
+        add_history(line);
+        return;
+    }
 }
 
 void unnamed_loop(void) {
