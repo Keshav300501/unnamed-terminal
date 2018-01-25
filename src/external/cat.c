@@ -41,6 +41,10 @@ void main(int argc, char **argv) {
             argv[i][strlen(argv[i])-1] == 0;
         }
         FILE *fr = fopen(argv[i], "r");
+        if(fr == NULL) {
+            printf("File does not exit.\n");
+            return;
+        }
         int ind = 0;
         char line[1024];
         while (fgets(line, 1024, fr) != NULL) {
