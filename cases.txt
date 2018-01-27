@@ -1,0 +1,71 @@
+Test Cases (wrt my PC):
+
+cd -> Goes to home as set by the system.
+cd -r -> CD doesn't support this argument. Error.
+cd Desktop -> Goes to Desktop.
+cd .. -> Goes back to home.
+cd Downloads -> Goes to Downloads.
+cd helo -> Directory not found. Error.
+cd . -> Stays in Downloads.
+cd ~ -> Goes to home.
+cd Desktop Downloads -> Too many arguments. Error.
+
+echo hello -> Prints hello.
+echo world -> Prints world.
+echo hello world -> Prints hello world.
+echo -n hello -> Prints hello without a newline.
+echo -r world -> Argument not supported. Error.
+echo -> Prints a newline.
+
+history -> Prints history since last clean of the binaries.
+history -c -> Cleans history.
+history -> Prints history since last history clean.
+history -w hello -> Prints history to file hello.
+history -r -> Argument not supported. Error.
+
+pwd -> Prints the current directory.
+pwd -r -> Argument not supported. Error.
+
+exit -> Exits the terminal.
+
+ls -> Prints contents of current directory excluding files starting with '.'.
+ls Desktop -> Prints contents of Desktop directory.
+ls Desktop Downloads -> Prints contents of Desktop and Downloads directories.
+ls -a -> Prints contents of current directory including files starting with '.'.
+ls -a Desktop -> Prints contents of Desktop directory including files starting with '.'.
+ls -a -r Documents -> Prints contents of Documents including dot files in reverse order.
+ls -x ->  Argument not supported. Error.
+ls okaylol -> Directory not found. Error.
+
+date -> Prints IST Date.
+date -u -> Prints UTC Date.
+date -x -> Argument not supported. Error.
+
+cat -> Opens cat in interactive mode.
+cat -n -> Numbers printed lines in interctive mode.
+cat -E -> Appends $ in place of newline character.
+cat -x -> Argument not supported. Error.
+cat hello -> Prints contents of hello file.
+cat hello world -> Prints contents of hello and world.
+cat -n hello -> Numbers and prints lines from hello.
+cat -n -E hello -> Numbers and prints lines from hello and appends a $ in place of newline.
+cat -E world -> Appends $ in place of newline in the world file and prints it.
+cat okay -> File does not exist. Error.
+
+mkdir -> Not enough arguments. Error.
+mkdir hell -> Makes directory hell.
+mkdir abc/xyz -> Cannot recursively create directories. Error.
+mkdir -p abc/xyz -> Recursively creates abc and xyz inside it.
+mkdir -v okay google lol -> Prints created directory after action.
+mkdir okay -> Directory already exists. Error.
+mkdir -x -> Argument not supported. Error.
+
+rm okay -> Cannot perform rm on directories. Error.
+rm -d okay -> Removes okay.
+rm -i -d google -> Asks before removing google. Needs a Y to approve.
+rm -d lol hell -> Removes directories lol and hell.
+rm -x -> Argument not supported. Error.
+rm hello world -> Removes files hello and world.
+rm -d abc -> Cannot remove non empty directory. Error.
+rm -d abc/xyz abc -> Removes abc and the directory inside it.
+

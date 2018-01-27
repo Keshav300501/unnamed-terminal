@@ -6,6 +6,9 @@ void main(int argc, char **argv) {
     int eflag = 0;
     int nflag = 0;
     for( ; argv[i] != NULL && argv[i][0] == '-' ; i++) {
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
+        }
         if(strcmp(argv[i], "-E") == 0) {
             eflag = 1;
         }
@@ -13,7 +16,7 @@ void main(int argc, char **argv) {
             nflag = 1;
         }
         else {
-            printf("Syntax error. Refer to readme.\n");
+            printf("Argument not supported. Refer to readme.\n");
             return;
         }
     }
@@ -36,16 +39,16 @@ void main(int argc, char **argv) {
         }
         return;
     }
+    int ind = 0;
     for( ; argv[i] != NULL ; i++) {
-        if (argv[i+1] == NULL) {
-            argv[i][strlen(argv[i])-1] == 0;
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
         }
         FILE *fr = fopen(argv[i], "r");
         if(fr == NULL) {
-            printf("File does not exit.\n");
+            printf("File does not exist.\n");
             return;
         }
-        int ind = 0;
         char line[1024];
         while (fgets(line, 1024, fr) != NULL) {
             ind++;

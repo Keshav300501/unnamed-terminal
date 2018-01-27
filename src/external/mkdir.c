@@ -10,6 +10,9 @@ void main(int argc, char **argv) {
     int pflag = 0;
     int vflag = 0;
     for( ; argv[i] != NULL && argv[i][0] == '-' ; i++) {
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
+        }
         if(strcmp(argv[i], "-p") == 0) {
             pflag = 1;
         }
@@ -26,8 +29,8 @@ void main(int argc, char **argv) {
         return;
     }
     for( ; argv[i] != NULL ; i++) {
-        if (argv[i+1] == NULL) {
-            argv[i][strlen(argv[i])-1] == 0;
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
         }
         if(pflag) {
             struct stat st = {0};

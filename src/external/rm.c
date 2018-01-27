@@ -8,6 +8,9 @@ void main(int argc, char **argv) {
     int iflag = 0;
     int dflag = 0;
     for( ; argv[i] != NULL && argv[i][0] == '-' ; i++) {
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
+        }
         if(strcmp(argv[i], "-i") == 0) {
             iflag = 1;
         }
@@ -15,7 +18,7 @@ void main(int argc, char **argv) {
             dflag = 1;
         }
         else {
-            printf("Syntax error. Refer to readme.\n");
+            printf("Argument not supported. Refer to readme.\n");
             return;
         }
     }
@@ -24,8 +27,8 @@ void main(int argc, char **argv) {
         return;
     }
     for( ; argv[i] != NULL ; i++) {
-        if (argv[i+1] == NULL) {
-            argv[i][strlen(argv[i])-1] == 0;
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
         }
         if(iflag) {
             printf("Are you sure you want to remove %s? ", argv[i]);

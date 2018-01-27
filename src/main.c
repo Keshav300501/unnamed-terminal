@@ -46,48 +46,52 @@ char **unnamed_split(char *line) {
     return args;
 }
 
-void add_history(char *line);
+void add_history(char **args);
 void unnamed_cd(char **args);
 void unnamed_echo(char **args);
 void unnamed_pwd(char **args);
 void unnamed_history(char **args);
 void unnamed_exit(char **args);
 
-void unnamed_exec(char *line, char **args) {
+void unnamed_exec(char **args) {
     if(args[0] == NULL) {
         return;
     }
     if(strcmp(args[0], "cd") == 0) {
         unnamed_cd(args);
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "echo") == 0) {
         unnamed_echo(args);
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "pwd") == 0) {
         unnamed_pwd(args);
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "history") == 0) {
         unnamed_history(args);
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "exit") == 0) {
         unnamed_exit(args);
-        add_history(line);
+        add_history(args);
         return;
     }
-    return external_call(line, args);
+    return external_call(args);
 }
 
-void add_history(char *line) {
-    FILE *fw = fopen("history","a");
-    fprintf(fw, "%s\n", line);
+void add_history(char **args) {
+    FILE *fw = fopen("/home/tank/Documents/unnamed-terminal/out/history","a");
+    int i;
+    for( i = 0 ; args[i] != NULL ; i++ ) {
+        fprintf(fw, "%s ", args[i]);    
+    }
+    fprintf(fw, "\n");
     fclose(fw);
 }
 
@@ -107,7 +111,12 @@ void unnamed_cd(char **args) {
         chdir(getenv("HOME"));
         return;
     }
-    chdir(args[1]);
+    if(args[1][0] == '-') {
+        printf("CD doesn't support this argument. Refer to readme.\n");
+    }
+    if(chdir(args[1]) != 0) {
+        printf("Directory not found. Refer to readme.\n");
+    }
     return;
 }
 
@@ -115,15 +124,19 @@ void unnamed_echo(char **args) {
     int i = 1;
     int nflag = 0;
     for( ; args[i] != NULL && args[i][0] == '-' ; i++) {
+        if(args[i][strlen(args[i])-1] == '\n') {
+            args[i][strlen(args[i])-1] = 0;
+        }
         if(strcmp(args[i], "-n") == 0) {
             nflag = 1;
         }
         else {
-            printf("Syntax error. Refer to readme.\n");
+            printf("Argument not supported. Refer to readme.\n");
             return;
         }
     }
     if(args[i] == NULL) {
+        printf("\n");
         return;
     }
     if(args[i][strlen(args[i])-1] == '\n' && nflag == 1) {
@@ -144,6 +157,11 @@ void unnamed_pwd(char **args) {
         fprintf(stdout, "Error in getting current path.\n");
         return;
     }
+    int i = 1;
+    for( ; args[i] != NULL && args[i][0] == '-' ; i++) {
+        printf("Argument not supported. Refer to readme.\n");
+        return;
+    }
     fprintf(stdout, "%s\n", cwd);
 }
 
@@ -154,11 +172,11 @@ void unnamed_history(char **args) {
             args[i][strlen(args[i])-1] = 0;
         }
         if(strcmp(args[i], "-c") == 0) {
-            FILE *fr = fopen("history","w");
+            FILE *fr = fopen("/home/tank/Documents/unnamed-terminal/out/history","w");
             fclose(fr);
             return;
         }
-        if(strcmp(args[i], "-w") == 0) {
+        else if(strcmp(args[i], "-w") == 0) {
             if(args[i+1] == NULL) {
                 printf("Missing argument to save history in. Refer to readme.\n");
                 return;
@@ -167,7 +185,7 @@ void unnamed_history(char **args) {
                 args[i+1][strlen(args[i+1])-1] = 0;
             }
             FILE *fw = fopen(args[i+1],"w");
-            FILE *fr = fopen("history","r+");
+            FILE *fr = fopen("/home/tank/Documents/unnamed-terminal/out/history","r+");
             int ind = 0;
             char ent[128];
             while (fgets(ent, 128, fr) != NULL) {
@@ -179,11 +197,11 @@ void unnamed_history(char **args) {
             return;
         }
         else {
-            printf("Syntax error. Refer to readme.\n");
+            printf("Argument not supported. Refer to readme.\n");
             return;
         }
     }
-    FILE *fr = fopen("history","r+");
+    FILE *fr = fopen("/home/tank/Documents/unnamed-terminal/out/history","r+");
     int ind = 0;
     char ent[128];
     while (fgets(ent, 128, fr) != NULL) {
@@ -197,7 +215,7 @@ void unnamed_exit(char **args) {
     exit(0);
 }
 
-void external_call(char *line, char **args) {
+void external_call(char **args) {
     if(strcmp(args[0], "cat") == 0) {
         if(fork() == 0) {
             execvp("/home/tank/Documents/unnamed-terminal/out/external/cat", args++);
@@ -205,17 +223,17 @@ void external_call(char *line, char **args) {
         else {
             wait(NULL);
         }
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "date") == 0) {
         if(fork() == 0) {
-            execvp("/home/tank/Documents/unnamed-terminal/out/external/cat", args++);
+            execvp("/home/tank/Documents/unnamed-terminal/out/external/date", args++);
         }
         else {
             wait(NULL);
         }
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "ls") == 0) {
@@ -225,7 +243,7 @@ void external_call(char *line, char **args) {
         else {
             wait(NULL);
         }
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "mkdir") == 0) {
@@ -235,7 +253,7 @@ void external_call(char *line, char **args) {
         else {
             wait(NULL);
         }
-        add_history(line);
+        add_history(args);
         return;
     }
     if(strcmp(args[0], "rm") == 0) {
@@ -245,9 +263,10 @@ void external_call(char *line, char **args) {
         else {
             wait(NULL);
         }
-        add_history(line);
+        add_history(args);
         return;
     }
+    printf("Command not found.\n");
 }
 
 void unnamed_loop(void) {
@@ -258,7 +277,7 @@ void unnamed_loop(void) {
         unnamed_prompt();
         line = unnamed_read();
         args = unnamed_split(line);
-        unnamed_exec(line, args);
+        unnamed_exec(args);
     } 
     while ( 1 );
 }

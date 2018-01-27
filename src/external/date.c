@@ -9,17 +9,20 @@ void main(int argc, char **argv) {
     int i = 1;
     if(argv[i] == NULL) {
         local = localtime(&t);
-        printf("%s\n", asctime(local));
+        printf("IST %s", asctime(local));
         return;
     }
     for( ; argv[i] != NULL && argv[i][0] == '-' ; i++) {
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
+        }
         if(strcmp(argv[i], "-u") == 0) {
             local = gmtime(&t);
-            printf("%s\n", asctime(local));
+            printf("UTC %s", asctime(local));
             return;
         }
         else {
-            printf("Syntax error. Refer to readme.\n");
+            printf("Argument not supported. Refer to readme.\n");
             return;
         }
     }

@@ -7,6 +7,9 @@ void main(int argc, char **argv) {
     int aflag = 0;
     int rflag = 0;
     for( ; argv[i] != NULL && argv[i][0] == '-' ; i++) {
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
+        }
         if(strcmp(argv[i], "-a") == 0) {
             aflag = 1;
         }
@@ -14,7 +17,7 @@ void main(int argc, char **argv) {
             rflag = 1;
         }
         else {
-            printf("Syntax error. Refer to readme.\n");
+            printf("Argument not supported. Refer to readme.\n");
             return;
         }
     }
@@ -29,7 +32,7 @@ void main(int argc, char **argv) {
             }
             arr[indx++] = dir->d_name;
         }
-        char t[256];
+        char t[1024];
         int i, j;
         for (i = 1; i < indx; i++) {
             for (j = 1; j < indx; j++) {
@@ -56,9 +59,12 @@ void main(int argc, char **argv) {
         closedir(d);
     }
     else if(argv[i+1] == NULL) {
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
+        }
         DIR *d = opendir(argv[i]);
         if( d == NULL ) {
-            printf("Directory not found.\n");
+            printf("Directory not found. Error!\n");
             return;
         }
         struct dirent *dir;
@@ -97,6 +103,9 @@ void main(int argc, char **argv) {
         closedir(d);
     }
     else for( ; argv[i] != NULL ; i++) {
+        if (argv[i][strlen(argv[i])-1] == '\n') {
+            argv[i][strlen(argv[i])-1] = 0;
+        }
         DIR *d = opendir(argv[i]);
         if( d == NULL ) {
             printf("Directory not found.\n");
@@ -112,7 +121,7 @@ void main(int argc, char **argv) {
             }
             arr[indx++] = dir->d_name;
         }
-        char t[256];
+        char t[1024];
         int i, j;
         for (i = 1; i < indx; i++) {
             for (j = 1; j < indx; j++) {
